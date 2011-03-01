@@ -7,6 +7,8 @@ from nose.tools import eq_
 from validator.validate import validate
 
 def _validator(file_path):
+    # TODO(Kumar) This is currently copied from Zamboni because
+    # it's really hard to import from zamboni outside of itself.
     # TODO(Kumar) remove this when validator is fixed, see bug 620503
     from validator.testcases import scripting
     js = 'js'
