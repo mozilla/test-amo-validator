@@ -1,0 +1,6 @@
+[submodule "zamboni"]
+	path = zamboni
+	url = git://github.com/jbalogh/zamboni.git
+[submodule "zamboni-lib"]
+	path = zamboni-lib
+	url = git://github.com/jbalogh/zamboni-lib.git
