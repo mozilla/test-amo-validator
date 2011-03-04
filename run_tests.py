@@ -1,13 +1,19 @@
 #!/usr/bin/env python
 import os
 import sys
+import warnings
 
 import environ
 environ.setup()
 
 import nose
 from nose.plugins import Plugin
-from nosenicedots.plugin import NiceDots
+try:
+    from nosenicedots.plugin import NiceDots
+except ImportError:
+    warnings.warn(
+        'Could not import nosenicedots (protip: install it in a virtualenv)')
+    NiceDots = None
 
 class Environ(Plugin):
     enabled = True
@@ -26,5 +32,8 @@ class Environ(Plugin):
 
 if __name__ == '__main__':
     args = list(sys.argv)
-    args.extend(['--with-nicedots'])
-    nose.main(argv=args, plugins=[Environ(), NiceDots()])
+    plugins = [Environ()]
+    if NiceDots:
+        plugins.append(NiceDots())
+        args.extend(['--with-nicedots'])
+    nose.main(argv=args, plugins=plugins)
