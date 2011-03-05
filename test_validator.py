@@ -24,7 +24,7 @@ def _validator(file_path):
                     spidermonkey=js)
 
 
-class TestValidation(unittest.TestCase):
+class ValidatorTest(unittest.TestCase):
 
     def msg_set(self, d):
         return sorted(set([m['message'] for m in d['messages']]))
@@ -32,6 +32,9 @@ class TestValidation(unittest.TestCase):
     def validate(self, xpi):
         path = os.path.join(os.path.dirname(__file__), 'addons', xpi)
         return json.loads(_validator(path))
+
+
+class JavaScriptTests(ValidatorTest):
 
     def test_createelement__used(self):
         """createElement() used to create script tag. The createElement()
@@ -94,3 +97,71 @@ class TestValidation(unittest.TestCase):
         msg = self.msg_set(d)
         assert u'Variable element type being created' in msg, (
             'Unexpected: %r' % msg)
+
+
+class GeneralTests(ValidatorTest):
+
+    def test_contains_jar_files(self):
+        """Add-on contains JAR files- no emUnpack"""
+        d = self.validate('test-theme-3004.jar')
+        msg = self.msg_set(d)
+        assert u'Add-on contains JAR files, no <em:unpack>' in msg, (
+            'Unexpected: %r' % msg)
+
+    def test_potentially_illegal_name(self):
+        """Add-on has potentially illegal name."""
+        d = self.validate('add-on20110110322.xpi')
+        msg = self.msg_set(d)
+        assert u'Add-on has potentially illegal name.' in msg, (
+            'Unexpected: %r' % msg)
+
+    def test_banned_element(self):
+        """Banned element in install"""
+        d = self.validate('gabbielsan_tools-1.01-ff.xpi')
+        msg = self.msg_set(d)
+        assert u'Banned element in install.rdf' in msg, ('Unexpected: %r' % msg)
+
+    def test_blacklisted_file(self):
+        """Blacklisted file extensions found"""
+        d = self.validate('babuji-20110124355.xpi')
+        msg = self.msg_set(d)
+        assert u'Blacklisted file extension found' in msg, (
+                                            'Unexpected: %r' % msg)
+
+    def test_blacklisted_file_2(self):
+        """Blacklisted file type found"""
+        d = self.validate('peerscape-3.1.5-fx.xpi')
+        msg = self.msg_set(d)
+        assert u'Blacklisted file type found' in msg, ('Unexpected: %r' % msg)
+
+    # def test_detected_conduit(self):
+    #     """Detected Conduit toolbar"""
+    #     d = self.validate('gabbielsan_tools-1.01-ff.xpi')
+    #     msg = self.msg_set(d)
+    #     assert u'Detected Conduit toolbar' in msg, ('Unexpected: %r' % msg)
+
+    def test_em_type_not(self):
+        """em-type not found"""
+        d = self.validate('babuji-20110124355.xpi')
+        msg = self.msg_set(d)
+        assert u'No <em:type> element found in install.rdf' in msg, (
+                                            'Unexpected: %r' % msg)
+
+    def test_obsolete_element(self):
+        """Obsolete element in installRDF"""
+        d = self.validate('gabbielsan_tools-1.01-ff.xpi')
+        msg = self.msg_set(d)
+        assert u'Banned element in install.rdf' in msg, ('Unexpected: %r' % msg)
+
+    def test_unknown_file(self):
+        """Unknown file found in add-on"""
+        d = self.validate('gabbielsan_tools-1.01-ff.xpi')
+        msg = self.msg_set(d)
+        assert u'Unrecognized element in install.rdf' in msg, (
+                                            'Unexpected: %r' % msg)
+
+    def test_unrecognized_element(self):
+        """Unrecognized element in install"""
+        d = self.validate('littlemonkey-1.8.56-sm.xpi')
+        msg = self.msg_set(d)
+        assert u'Addon missing install.rdf.' in msg, ('Unexpected: %r' % msg)

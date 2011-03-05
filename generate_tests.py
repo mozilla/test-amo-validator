@@ -44,7 +44,8 @@ def main():
         path = os.path.join(addon_dir, name)
         short = '_'.join([nonchar.sub('_', f).lower()
                           for f in name.split()[0:2]])
-        xpi = [os.path.join(path, x) for x in os.listdir(path)]
+        xpi = [os.path.join(path, x) for x in os.listdir(path)
+               if not x.startswith('.')]
         assert len(xpi) == 1, 'Unexpected: %r' % xpi
         xpi = xpi[0]
         res = json.loads(_validator(xpi))
