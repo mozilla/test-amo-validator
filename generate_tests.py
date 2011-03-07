@@ -46,7 +46,7 @@ def main():
                           for f in name.split()[0:2]])
         xpi = [os.path.join(path, x) for x in os.listdir(path)
                if not x.startswith('.')]
-        assert len(xpi) == 1, 'Unexpected: %r' % xpi
+        assert len(xpi) == 1, ('Unexpected: %r for %r' % (xpi, path))
         xpi = xpi[0]
         res = json.loads(_validator(xpi))
         code.extend(["",
