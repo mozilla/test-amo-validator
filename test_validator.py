@@ -144,12 +144,6 @@ class GeneralTests(ValidatorTest):
         msg = self.msg_set(d)
         assert u'Blacklisted file type found' in msg, ('Unexpected: %r' % msg)
 
-    # def test_detected_conduit(self):
-    #     """Detected Conduit toolbar"""
-    #     d = self.validate('gabbielsan_tools-1.01-ff.xpi')
-    #     msg = self.msg_set(d)
-    #     assert u'Detected Conduit toolbar' in msg, ('Unexpected: %r' % msg)
-
     def test_em_type_not(self):
         """em-type not found"""
         d = self.validate('babuji-20110124355.xpi')
