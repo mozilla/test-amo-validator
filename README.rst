@@ -6,7 +6,7 @@ Install
 
 Clone this repo with *all* submodules::
 
-  git clone --recursive git://github.com/kumar303/test-amo-validator.git
+  git clone --recursive git://github.com/mozilla/test-amo-validator.git
 
 Usage
 =====
@@ -35,7 +35,7 @@ and install it::
 You can pass the ``--no-deps`` flag since you already have the dependencies
 from `Zamboni-lib`_.
 
-.. _`amo-validator`: https://github.com/mattbasta/amo-validator
+.. _`amo-validator`: https://github.com/mozilla/amo-validator
 .. _`Zamboni`: https://github.com/jbalogh/zamboni/
 .. _`Zamboni-lib`: https://github.com/jbalogh/zamboni-lib/
 .. _`virtualenv`: http://pypi.python.org/pypi/virtualenv
