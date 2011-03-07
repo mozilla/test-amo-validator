@@ -202,7 +202,7 @@ class LocalizationTests(ValidatorTest):
     def test_encodings(self):
         d = self.validate('babuji-20110124355.xpi')
         msg = self.msg_set(d)
-        assert u'Unexpected encodings in L10n files' in msg, (
+        assert u'Unexpected encodings in locale files' in msg, (
                                                 'Unexpected: %r' % msg)
 
     def test_missing_translation(self):
