@@ -17,9 +17,9 @@ def _validator(file_path):
     validator.constants.SPIDERMONKEY_INSTALLATION = js
     apps = os.path.join(os.path.dirname(__file__), 'apps.json')
     return validate(file_path, format='json',
-                    # This flag says to stop testing after one tier fails.
-                    # bug 615426
-                    determined=False,
+                    # Test all tiers at once. This will make sure we see
+                    # all error messages.
+                    determined=True,
                     approved_applications=apps,
                     spidermonkey=js)
 
