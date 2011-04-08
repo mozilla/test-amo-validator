@@ -11,6 +11,7 @@ def _validator(file_path):
     # TODO(Kumar) This is currently copied from Zamboni because
     # it's really hard to import from zamboni outside of itself.
     # TODO(Kumar) remove this when validator is fixed, see bug 620503
+    js = None
     if not os.environ.get('SPIDERMONKEY_INSTALLATION'):
         from validator.testcases import scripting
         js = 'js'
