@@ -4,38 +4,28 @@ used at http://addons.mozilla.org/
 Install
 =======
 
-Clone this repo with *all* submodules::
+You need Python 2.6 or higher.  Then clone this repo::
 
-  git clone --recursive git://github.com/mozilla/test-amo-validator.git
+  git clone git://github.com/mozilla/test-amo-validator.git
+
+Install the dependencies::
+
+  cd test-amo-validator
+  pip install -r requirements.txt
+
+You'll probably want to do all of this inside a virtualenv_ using
+`virtualenvwrapper`_.
 
 Usage
 =====
 
-Requires Python 2.6 or higher.
-
 ::
 
   cd test-amo-validator
-  python run_tests.py
+  nosetests
 
 Then make a cup of tea while all of those tests run.  It takes a while.
 
-Requirements
-============
-
-All requirements are available to you when you clone the repository.
-These are the same exact libraries used in the master branch of `Zamboni`_
-and `Zamboni-lib`_.
-
-If you want to try out a newer validator, create a `virtualenv`_
-and install it::
-
-  pip install --no-deps -e git://github.com/mattbasta/amo-validator.git#egg=amo-validator
-
-You can pass the ``--no-deps`` flag since you already have the dependencies
-from `Zamboni-lib`_.
-
 .. _`amo-validator`: https://github.com/mozilla/amo-validator
-.. _`Zamboni`: https://github.com/jbalogh/zamboni/
-.. _`Zamboni-lib`: https://github.com/jbalogh/zamboni-lib/
 .. _`virtualenv`: http://pypi.python.org/pypi/virtualenv
+.. _`virtualenvwrapper`: http://www.doughellmann.com/docs/virtualenvwrapper/

@@ -1,0 +1,4 @@
+nose>=1.0
+nosenicedots
+-e git+git://github.com/mozilla/amo-validator.git#egg=amo-validator
+-e git://github.com/mattbasta/fastchardet#egg=fastchardet

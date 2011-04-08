@@ -3,6 +3,7 @@ import json
 import os
 import unittest
 
+from nose.exc import SkipTest
 from nose.tools import eq_
 from validator.validate import validate
 
@@ -93,7 +94,8 @@ class JavaScriptTests(ValidatorTest):
         """JavaScript Syntax Error"""
         d = self.validate('stumbleupon-3.76-fx+sm+mz.xpi')
         msg = self.msg_set(d)
-        assert u'JavaScript Syntax Error' in msg, ('Unexpected: %r' % msg)
+        assert u'JavaScript Compile-Time Error' in msg, (
+                                                    'Unexpected: %r' % msg)
 
     def test_potentially_malicious(self):
         """Potentially malicious JS"""
@@ -135,14 +137,14 @@ class GeneralTests(ValidatorTest):
         """Blacklisted file extensions found"""
         d = self.validate('babuji-20110124355.xpi')
         msg = self.msg_set(d)
-        assert u'Blacklisted file extension found' in msg, (
+        assert u'Flagged file extension found' in msg, (
                                             'Unexpected: %r' % msg)
 
     def test_blacklisted_file_2(self):
         """Blacklisted file type found"""
         d = self.validate('peerscape-3.1.5-fx.xpi')
         msg = self.msg_set(d)
-        assert u'Blacklisted file type found' in msg, ('Unexpected: %r' % msg)
+        assert u'Flagged file type found' in msg, ('Unexpected: %r' % msg)
 
     def test_em_type_not(self):
         """em-type not found"""

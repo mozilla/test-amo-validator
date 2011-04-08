@@ -10,9 +10,6 @@ import os
 import re
 import sys
 
-import environ
-environ.setup()
-
 
 nonchar = re.compile(r'[^a-zA-Z0-9]+')
 
