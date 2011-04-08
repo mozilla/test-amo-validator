@@ -11,11 +11,12 @@ def _validator(file_path):
     # TODO(Kumar) This is currently copied from Zamboni because
     # it's really hard to import from zamboni outside of itself.
     # TODO(Kumar) remove this when validator is fixed, see bug 620503
-    from validator.testcases import scripting
-    js = 'js'
-    scripting.SPIDERMONKEY_INSTALLATION = js
-    import validator.constants
-    validator.constants.SPIDERMONKEY_INSTALLATION = js
+    if not os.environ.get('SPIDERMONKEY_INSTALLATION'):
+        from validator.testcases import scripting
+        js = 'js'
+        scripting.SPIDERMONKEY_INSTALLATION = js
+        import validator.constants
+        validator.constants.SPIDERMONKEY_INSTALLATION = js
     apps = os.path.join(os.path.dirname(__file__), 'apps.json')
     return validate(file_path, format='json',
                     # Test all tiers at once. This will make sure we see
