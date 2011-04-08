@@ -26,6 +26,8 @@ source $VENV/bin/activate
 
 pip install -q -r requirements.txt
 
+export SPIDERMONKEY_INSTALLATION="/usr/local/bin/tracemonkey"
+
 echo "Starting tests..." `date`
 
 nosetests --verbose --with-xunit
