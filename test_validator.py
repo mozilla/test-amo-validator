@@ -1,7 +1,9 @@
 
 import json
 import os
+import sys
 import unittest
+from cStringIO import StringIO
 
 from nose.exc import SkipTest
 from nose.tools import eq_
@@ -17,12 +19,25 @@ def _validator(file_path):
     scripting.SPIDERMONKEY_INSTALLATION = js
     validator.constants.SPIDERMONKEY_INSTALLATION = js
     apps = os.path.join(os.path.dirname(__file__), 'apps.json')
-    return validate(file_path, format='json',
-                    # Test all tiers at once. This will make sure we see
-                    # all error messages.
-                    determined=True,
-                    approved_applications=apps,
-                    spidermonkey=js)
+    orig = sys.stderr
+    sys.stderr = StringIO()
+    try:
+        result = validate(file_path, format='json',
+                        # Test all tiers at once. This will make sure we see
+                        # all error messages.
+                        determined=True,
+                        approved_applications=apps,
+                        spidermonkey=js)
+        sys.stdout.write(sys.stderr.getvalue())
+        if 'Traceback' in sys.stderr.getvalue():
+            # the validator catches and ignores certain errors in an attempt
+            # to remain versatile.  There should not be any exceptions
+            # while testing.
+            raise RuntimeError(
+                "An exception was raised during validation. Check stderr")
+    finally:
+        sys.stderr = orig
+    return result
 
 
 _cached_validation = {}
