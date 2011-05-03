@@ -91,14 +91,6 @@ class JavaScriptTests(ValidatorTest):
         self.validate('babuji-20110124355.xpi')
         self.expectMsg(u'Global called in dangerous manner')
 
-    def test_invalid_control(self):
-        self.validate('amazonassist-201103011128.xpi')
-        self.expectMsg(u'Invalid control character in JS file')
-
-    def test_javascript_syntax(self):
-        self.validate('stumbleupon-3.76-fx+sm+mz.xpi')
-        self.expectMsg(u'JavaScript Compile-Time Error')
-
     def test_potentially_malicious(self):
         self.validate('add-on201101101027.xpi')
         self.expectMsg(u'Potentially malicious JS')
