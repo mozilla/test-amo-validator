@@ -5,9 +5,9 @@ import sys
 import unittest
 from cStringIO import StringIO
 
-from nose.exc import SkipTest
 from nose.tools import eq_
 from validator.validate import validate
+
 
 def _validator(file_path):
     # TODO(Kumar) This is currently copied from Zamboni because
@@ -146,7 +146,8 @@ class GeneralTests(ValidatorTest):
         """Banned element in install"""
         d = self.validate('gabbielsan_tools-1.01-ff.xpi')
         msg = self.msg_set(d)
-        assert u'Banned element in install.rdf' in msg, ('Unexpected: %r' % msg)
+        assert u'Banned element in install.rdf' in msg, (
+                                                'Unexpected: %r' % msg)
 
     def test_blacklisted_file(self):
         """Blacklisted file extensions found"""
@@ -172,7 +173,8 @@ class GeneralTests(ValidatorTest):
         """Obsolete element in installRDF"""
         d = self.validate('gabbielsan_tools-1.01-ff.xpi')
         msg = self.msg_set(d)
-        assert u'Banned element in install.rdf' in msg, ('Unexpected: %r' % msg)
+        assert u'Banned element in install.rdf' in msg, (
+                                            'Unexpected: %r' % msg)
 
     def test_unknown_file(self):
         """Unknown file found in add-on"""
@@ -250,7 +252,8 @@ class SecurityTests(ValidatorTest):
 class NoErrorsExpected(ValidatorTest):
 
     def test_an_attempt(self):
-        """An attempt to overwrite a global varible [sic] made in some JS code"""
+        """An attempt to overwrite a global varible [sic] made in some
+        JS code"""
         d = self.validate('tmp.xpi')
         eq_(d['errors'], 0)
 
