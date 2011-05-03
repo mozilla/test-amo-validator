@@ -281,15 +281,15 @@ class SearchTools(ValidatorTest):
         """OpenSearch providers cannot contain <Url :> ..."""
         d = self.validate('sms_search-20110115 .xml')
         msg = self.msg_set(d)
-        self.assertPartialMsg(msg,
-            'OpenSearch: Per AMO guidelines, OpenSearch providers '
-            'cannot contain <Url />')
+        msg = self.msg_set(d)
+        assert u'OpenSearch: <Url> elements may not be rel=self' in msg, (
+                                                'Unexpected: %r' % msg)
 
     def test_opensearch_shortname(self):
         """OpenSearch ShortName values longer than 16 characters"""
         d = self.validate('lexisone_citation_search-20100116 .xml')
         msg = self.msg_set(d)
-        assert u'OpenSearch: <ShortName> too long; must be <17 characters' in msg, (
+        assert u'OpenSearch: <ShortName> element too long' in msg, (
                                                 'Unexpected: %r' % msg)
 
     def test_too_many(self):
