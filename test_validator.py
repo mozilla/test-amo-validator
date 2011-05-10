@@ -150,6 +150,10 @@ class GeneralTests(ValidatorTest):
         self.validate('invalid maximum version number.xpi')
         self.expectMsg(u'Invalid maximum version number')
 
+    def test_non_ascii_html_markup(self):
+        # should be no Unicode errors
+        self.validate('non-ascii-html.xpi')
+
 
 class LocalizationTests(ValidatorTest):
 
