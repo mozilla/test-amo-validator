@@ -22,9 +22,11 @@ Usage
 ::
 
   cd test-amo-validator
-  nosetests
+  nosetests --processes=2
 
 Then make a cup of tea while all of those tests run.  It takes a while.
+If you have more than two cores on your machine or you don't mind pwnage,
+you can try to increase the number of parallel processes used for testing.
 
 .. _`amo-validator`: https://github.com/mozilla/amo-validator
 .. _`virtualenv`: http://pypi.python.org/pypi/virtualenv
