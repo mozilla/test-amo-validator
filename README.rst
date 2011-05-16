@@ -16,6 +16,9 @@ Install the dependencies::
 You'll probably want to do all of this inside a virtualenv_ using
 `virtualenvwrapper`_.
 
+In addition to this command you also need to **build spidermonkey from
+source** as detailed in `amo-validator`_'s install instructions.
+
 Usage
 =====
 
