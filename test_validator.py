@@ -9,7 +9,10 @@ from nose.tools import eq_
 from validator.validate import validate
 
 
-def _validator(file_path):
+FIREFOX_GUID = '{ec8030f7-c20a-464f-9b0e-13a3a9e97384}'
+
+
+def _validator(file_path, compatibility=None):
     # TODO(Kumar) This is currently copied from Zamboni because
     # it's really hard to import from zamboni outside of itself.
     # TODO(Kumar) remove this when validator is fixed, see bug 620503
@@ -27,7 +30,9 @@ def _validator(file_path):
                         # all error messages.
                         determined=True,
                         approved_applications=apps,
-                        spidermonkey=js)
+                        spidermonkey=js,
+                        #for_appversions=compatibility,
+                        overrides={"targetapp_maxVersion": compatibility or {}})
         sys.stdout.write(sys.stderr.getvalue())
         if 'Traceback' in sys.stderr.getvalue():
             # the validator catches and ignores certain errors in an attempt
@@ -48,20 +53,25 @@ class ValidatorTest(unittest.TestCase):
     def setUp(self):
         self.validation = None
         self.messages = None
+        self.ids = None
 
     def msg_set(self, d):
         return sorted(set([m['message'] for m in d['messages']]))
 
-    def validate(self, xpi):
-        self.validation = self._run_validation(xpi)
+    def id_set(self, d):
+        return sorted(set([str(m['id']) for m in d['messages']]))
+
+    def validate(self, xpi, compatibility=None):
+        self.validation = self._run_validation(xpi, compatibility)
         self.messages = self.msg_set(self.validation)
+        self.ids = self.id_set(self.validation)
         return self.validation
 
-    def _run_validation(self, xpi):
+    def _run_validation(self, xpi, compatibility=None):
         path = os.path.join(os.path.dirname(__file__), 'addons', xpi)
         if path in _cached_validation:
             return _cached_validation[path]
-        v = json.loads(_validator(path))
+        v = json.loads(_validator(path, compatibility))
         _cached_validation[path] = v
         return v
 
@@ -75,6 +85,10 @@ class ValidatorTest(unittest.TestCase):
     def expectMsg(self, msg):
         assert msg in self.messages, (
                     'Expected %r but only got %r' % (msg, self.messages))
+
+    def expectId(self, id):
+        assert id in self.ids, (
+                    'Expected %r but only got %r' % (id, self.ids))
 
 
 class JavaScriptTests(ValidatorTest):
@@ -179,6 +193,15 @@ class SecurityTests(ValidatorTest):
     def test_typeless_iframes_browsers(self):
         self.validate('add-on201101081038.xpi')
         self.expectMsg(u'Typeless iframes/browsers must be local.')
+
+    def test_binary_files(self):
+        self.validate('cooliris-1.12.2.44172-fx-mac.xpi.xpi',
+                      compatibility={FIREFOX_GUID: "5.0a2"})
+        self.expectMsg(u"Flagged file extension found")
+        self.expectMsg(u"Flagged file type found")
+        self.expectId("[u'testcases_packagelayout',"
+                      " u'test_compatibility_binary',"
+                      " u'disallowed_extension']")
 
 
 class NoErrorsExpected(ValidatorTest):
