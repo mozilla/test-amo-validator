@@ -14,11 +14,16 @@ def _validator(file_path):
     # it's really hard to import from zamboni outside of itself.
     # TODO(Kumar) remove this when validator is fixed, see bug 620503
     from validator.testcases import scripting
+    import validator
     import validator.constants
     js = os.environ.get('SPIDERMONKEY_INSTALLATION', 'js')
     scripting.SPIDERMONKEY_INSTALLATION = js
     validator.constants.SPIDERMONKEY_INSTALLATION = js
-    apps = os.path.join(os.path.dirname(__file__), 'apps.json')
+    apps = os.path.join(os.path.dirname(validator.__file__),
+                        'app_versions.json')
+    if not os.path.exists(apps):
+        raise EnvironmentError('Could not locate app_versions.json in git '
+                               'repo for validator. Tried: %s' % apps)
     orig = sys.stderr
     sys.stderr = StringIO()
     try:
