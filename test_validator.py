@@ -150,7 +150,7 @@ class GeneralTests(ValidatorTest):
 
     def test_unrecognized_element(self):
         self.validate('littlemonkey-1.8.56-sm.xpi')
-        self.expectMsg(u'Addon missing install.rdf.')
+        self.expectMsg(u'Add-on missing install.rdf.')
 
     def test_invalid_id(self):
         self.validate('add-ongoogle-201101121132.xpi')
