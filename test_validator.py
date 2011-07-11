@@ -31,6 +31,9 @@ def _validator(file_path, compatibility=None):
                         determined=True,
                         approved_applications=apps,
                         spidermonkey=js,
+                        # Commented out because we want to let the tests
+                        # choose whether to run or not. This step is
+                        # unnecessary.
                         #for_appversions=compatibility,
                         overrides={"targetapp_maxVersion": compatibility or {}})
         sys.stdout.write(sys.stderr.getvalue())
