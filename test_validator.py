@@ -36,6 +36,9 @@ def _validator(file_path, compatibility=None):
                         determined=True,
                         approved_applications=apps,
                         spidermonkey=js,
+                        # Commented out because we want to let the tests
+                        # choose whether to run or not. This step is
+                        # unnecessary.
                         #for_appversions=compatibility,
                         overrides={"targetapp_maxVersion": compatibility or {}})
         sys.stdout.write(sys.stderr.getvalue())
@@ -112,7 +115,7 @@ class JavaScriptTests(ValidatorTest):
 
     def test_potentially_malicious(self):
         self.validate('add-on201101101027.xpi')
-        self.expectMsg(u'Potentially malicious JS')
+        self.expectMsg(u'Potentially unsafe JS in use.')
 
     def test_variable_element(self):
         self.validate('glee-20101227219.xpi')
