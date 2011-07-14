@@ -110,7 +110,7 @@ class JavaScriptTests(ValidatorTest):
 
     def test_potentially_malicious(self):
         self.validate('add-on201101101027.xpi')
-        self.expectMsg(u'Potentially malicious JS')
+        self.expectMsg(u'Potentially unsafe JS in use.')
 
     def test_variable_element(self):
         self.validate('glee-20101227219.xpi')
