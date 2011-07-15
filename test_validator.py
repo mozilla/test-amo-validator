@@ -235,6 +235,10 @@ class NoErrorsExpected(ValidatorTest):
         d = self.validate('add-on20101228444 (1).jar')
         eq_(d['errors'], 0)
 
+    def test_chromemanifest_traceback(self):
+        d = self.validate('chromemanifest-traceback.jar')
+        eq_(d['errors'], 0)
+
 
 class SearchTools(ValidatorTest):
 
