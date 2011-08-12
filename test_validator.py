@@ -10,6 +10,7 @@ from validator.validate import validate
 
 
 FIREFOX_GUID = '{ec8030f7-c20a-464f-9b0e-13a3a9e97384}'
+THUNDERBIRD_GUID = '{3550f703-e582-4d05-9a08-453d09bdfdc6}'
 
 
 def _validator(file_path, compatibility=None):
@@ -210,6 +211,14 @@ class SecurityTests(ValidatorTest):
         self.expectId("[u'testcases_packagelayout',"
                       " u'test_compatibility_binary',"
                       " u'disallowed_extension']")
+                      
+    def test_thunderbird_binary_files(self):
+        self.validate('enigmail-1.2-sm-windows.xpi',
+                      compatibility={THUNDERBIRD_GUID: "6.0a1"})
+        self.expectMsg(u"Flagged file extension found")
+        self.expectId("[u'testcases_packagelayout',"
+                      " u'test_compatibility_binary',"
+                      " u'disallowed_extension']") 
 
 
 class NoErrorsExpected(ValidatorTest):
