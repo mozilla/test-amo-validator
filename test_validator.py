@@ -108,11 +108,13 @@ class JavaScriptTests(ValidatorTest):
 
     def test_dangerous_global(self):
         self.validate('feedly-addon-201101111013.xpi')
-        self.expectMsg(u'Dangerous Global Object')
+        self.expectMsg(u"'setTimeout' function called in potentially "
+                       u"dangerous manner")
 
     def test_global_called(self):
         self.validate('babuji-20110124355.xpi')
-        self.expectMsg(u'Global called in dangerous manner')
+        self.expectMsg(u"'setTimeout' function called in potentially "
+                       u"dangerous manner")
 
     def test_potentially_malicious(self):
         self.validate('add-on201101101027.xpi')
@@ -211,14 +213,14 @@ class SecurityTests(ValidatorTest):
         self.expectId("[u'testcases_packagelayout',"
                       " u'test_compatibility_binary',"
                       " u'disallowed_extension']")
-                      
+
     def test_thunderbird_binary_files(self):
         self.validate('enigmail-1.2-sm-windows.xpi',
                       compatibility={THUNDERBIRD_GUID: "6.0a1"})
         self.expectMsg(u"Flagged file extension found")
         self.expectId("[u'testcases_packagelayout',"
                       " u'test_compatibility_binary',"
-                      " u'disallowed_extension']") 
+                      " u'disallowed_extension']")
 
 
 class NoErrorsExpected(ValidatorTest):
