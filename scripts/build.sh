@@ -26,7 +26,7 @@ source $VENV/bin/activate
 
 pip install -q -r requirements.txt
 
-export SPIDERMONKEY_INSTALLATION="/usr/local/bin/tracemonkey"
+export SPIDERMONKEY_INSTALLATION=`which tracemonkey`
 
 echo "Starting tests..." `date`
 
