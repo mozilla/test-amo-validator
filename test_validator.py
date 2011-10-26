@@ -10,10 +10,11 @@ from validator.validate import validate
 
 
 FIREFOX_GUID = '{ec8030f7-c20a-464f-9b0e-13a3a9e97384}'
+MOBILE_GUID = '{a23983c0-fd0e-11dc-95ff-0800200c9a66}'
 THUNDERBIRD_GUID = '{3550f703-e582-4d05-9a08-453d09bdfdc6}'
 
 
-def _validator(file_path, compatibility=None):
+def _validator(file_path, for_appversions=None, overrides=None):
     # TODO(Kumar) This is currently copied from Zamboni because
     # it's really hard to import from zamboni outside of itself.
     # TODO(Kumar) remove this when validator is fixed, see bug 620503
@@ -37,11 +38,8 @@ def _validator(file_path, compatibility=None):
                         determined=True,
                         approved_applications=apps,
                         spidermonkey=js,
-                        # Commented out because we want to let the tests
-                        # choose whether to run or not. This step is
-                        # unnecessary.
-                        #for_appversions=compatibility,
-                        overrides={"targetapp_maxVersion": compatibility or {}})
+                        for_appversions=for_appversions,
+                        overrides=overrides)
         sys.stdout.write(sys.stderr.getvalue())
         if 'Traceback' in sys.stderr.getvalue():
             # the validator catches and ignores certain errors in an attempt
@@ -68,20 +66,38 @@ class ValidatorTest(unittest.TestCase):
         return sorted(set([m['message'] for m in d['messages']]))
 
     def id_set(self, d):
-        return sorted(set([str(m['id']) for m in d['messages']]))
+        return set([tuple(m['id']) for m in d['messages']])
 
-    def validate(self, xpi, compatibility=None):
-        self.validation = self._run_validation(xpi, compatibility)
+    def validate(self, xpi, **validate_kwargs):
+        self.validation = self._run_validation(xpi, **validate_kwargs)
         self.messages = self.msg_set(self.validation)
         self.ids = self.id_set(self.validation)
         return self.validation
 
-    def _run_validation(self, xpi, compatibility=None):
+    def _cache_key(self, *vals):
+        args = []
+        for v in vals:
+            self._flatten(args, v)
+        return tuple(sorted(args))
+
+    def _flatten(self, args, val):
+        if isinstance(val, dict):
+            for k, v in val.iteritems():
+                self._flatten(args, k)
+                self._flatten(args, v)
+        elif isinstance(val, list):
+            for v in val:
+                self._flatten(args, v)
+        else:
+            args.append(val)
+
+    def _run_validation(self, xpi, **validate_kwargs):
         path = os.path.join(os.path.dirname(__file__), 'addons', xpi)
-        if path in _cached_validation:
+        cache_key = self._cache_key(path, validate_kwargs)
+        if cache_key in _cached_validation:
             return _cached_validation[path]
-        v = json.loads(_validator(path, compatibility))
-        _cached_validation[path] = v
+        v = json.loads(_validator(path, **validate_kwargs))
+        _cached_validation[cache_key] = v
         return v
 
     def assertPartialMsg(self, partial_msg):
@@ -95,9 +111,20 @@ class ValidatorTest(unittest.TestCase):
         assert msg in self.messages, (
                     'Expected %r but only got %r' % (msg, self.messages))
 
+    def shouldNotGetMsg(self, msg):
+        assert msg not in self.messages, ('Did not expect %r' % (msg))
+
     def expectId(self, id):
         assert id in self.ids, (
                     'Expected %r but only got %r' % (id, self.ids))
+
+
+class CompatValidatorTest(ValidatorTest):
+
+    def validate_for_appver(self, xpi, app_guid, app_ver):
+        overrides = {'targetapp_maxVersion': {app_guid: app_ver}}
+        return self.validate(xpi, overrides=overrides,
+                             for_appversions={app_guid: [app_ver]})
 
 
 class JavaScriptTests(ValidatorTest):
@@ -195,7 +222,7 @@ class LocalizationTests(ValidatorTest):
         self.expectMsg(u'Missing translation entity')
 
 
-class SecurityTests(ValidatorTest):
+class SecurityTests(CompatValidatorTest):
 
     def test_missing_comments(self):
         self.validate('add-on-20110113408.xpi')
@@ -206,21 +233,21 @@ class SecurityTests(ValidatorTest):
         self.expectMsg(u'Typeless iframes/browsers must be local.')
 
     def test_binary_files(self):
-        self.validate('cooliris-1.12.2.44172-fx-mac.xpi.xpi',
-                      compatibility={FIREFOX_GUID: "5.0a2"})
+        self.validate_for_appver('cooliris-1.12.2.44172-fx-mac.xpi.xpi',
+                                 FIREFOX_GUID, '5.0a2')
         self.expectMsg(u"Flagged file extension found")
         self.expectMsg(u"Flagged file type found")
-        self.expectId("[u'testcases_packagelayout',"
-                      " u'test_compatibility_binary',"
-                      " u'disallowed_extension']")
+        self.expectId(('testcases_packagelayout',
+                       'test_compatibility_binary',
+                       'disallowed_extension'))
 
     def test_thunderbird_binary_files(self):
-        self.validate('enigmail-1.2-sm-windows.xpi',
-                      compatibility={THUNDERBIRD_GUID: "6.0a1"})
+        self.validate_for_appver('enigmail-1.2-sm-windows.xpi',
+                                 THUNDERBIRD_GUID, '6.0a1')
         self.expectMsg(u"Flagged file extension found")
-        self.expectId("[u'testcases_packagelayout',"
-                      " u'test_compatibility_binary',"
-                      " u'disallowed_extension']")
+        self.expectId(('testcases_packagelayout',
+                       'test_compatibility_binary',
+                       'disallowed_extension'))
 
 
 class NoErrorsExpected(ValidatorTest):
@@ -264,3 +291,22 @@ class SearchTools(ValidatorTest):
     def test_too_many(self):
         self.validate('addon-12201-latest.xml')
         self.expectMsg(u'OpenSearch: Too many <ShortName> elements')
+
+
+class NavigatorLang(CompatValidatorTest):
+
+    def test_firefox_5(self):
+        self.validate_for_appver('navigator-lang-addon.xpi',
+                                 FIREFOX_GUID, '5.*')
+        self.expectMsg(u'navigator.language may not behave as expected')
+
+    def test_mobile_5(self):
+        self.validate_for_appver('navigator-lang-addon.xpi',
+                                 MOBILE_GUID, '5.*')
+        self.expectMsg(u'navigator.language may not behave as expected')
+
+    def test_firefox_6(self):
+        # The test should not run for any other Firefox version
+        self.validate_for_appver('navigator-lang-addon.xpi',
+                                 FIREFOX_GUID, '6.*')
+        self.shouldNotGetMsg(u'navigator.language may not behave as expected')
