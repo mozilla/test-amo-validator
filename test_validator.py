@@ -95,7 +95,7 @@ class ValidatorTest(unittest.TestCase):
         path = os.path.join(os.path.dirname(__file__), 'addons', xpi)
         cache_key = self._cache_key(path, validate_kwargs)
         if cache_key in _cached_validation:
-            return _cached_validation[path]
+            return _cached_validation[cache_key]
         v = json.loads(_validator(path, **validate_kwargs))
         _cached_validation[cache_key] = v
         return v
