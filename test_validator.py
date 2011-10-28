@@ -310,3 +310,11 @@ class NavigatorLang(CompatValidatorTest):
         self.validate_for_appver('navigator-lang-addon.xpi',
                                  FIREFOX_GUID, '6.*')
         self.shouldNotGetMsg(u'navigator.language may not behave as expected')
+
+
+class ValidateLibs(CompatValidatorTest):
+
+    def test_mootools_navigator_taint_error(self):
+        self.validate_for_appver('addon_with_mootools.xpi',
+                                 FIREFOX_GUID, '9.*')
+        self.expectMsg('navigator.taintEnabled was removed in Firefox 9.')
