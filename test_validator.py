@@ -39,6 +39,7 @@ def _validator(file_path, for_appversions=None, overrides=None):
                         approved_applications=apps,
                         spidermonkey=js,
                         for_appversions=for_appversions,
+                        timeout=60 * 3,  # seconds
                         overrides=overrides)
         sys.stdout.write(sys.stderr.getvalue())
         if 'Traceback' in sys.stderr.getvalue():
