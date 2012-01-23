@@ -240,7 +240,7 @@ class SecurityTests(CompatValidatorTest):
         self.expectMsg(u"Flagged file type found")
         self.expectId(('testcases_packagelayout',
                        'test_compatibility_binary',
-                       'disallowed_extension'))
+                       'disallowed_file_type'))
 
     def test_thunderbird_binary_files(self):
         self.validate_for_appver('enigmail-1.2-sm-windows.xpi',
@@ -248,7 +248,7 @@ class SecurityTests(CompatValidatorTest):
         self.expectMsg(u"Flagged file extension found")
         self.expectId(('testcases_packagelayout',
                        'test_compatibility_binary',
-                       'disallowed_extension'))
+                       'disallowed_file_type'))
 
 
 class NoErrorsExpected(ValidatorTest):
