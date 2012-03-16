@@ -31,6 +31,17 @@ Then make a cup of tea while all of those tests run.  It takes a while.
 If you have more than two cores on your machine or you don't mind pwnage,
 you can try to increase the number of parallel processes used for testing.
 
+The Validator
+=============
+
+By default, the HEAD of `amo-validator`_'s git repo will be installed.
+If you want to run the tests against your local amo-validator, install it
+like this within your test-amo-validator virtualenv::
+
+  pushd ~/amo-validator
+  python setup.py develop --no-deps
+  popd
+
 .. _`amo-validator`: https://github.com/mozilla/amo-validator
 .. _`virtualenv`: http://pypi.python.org/pypi/virtualenv
 .. _`virtualenvwrapper`: http://www.doughellmann.com/docs/virtualenvwrapper/
