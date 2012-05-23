@@ -146,7 +146,7 @@ class JavaScriptTests(ValidatorTest):
 
     def test_potentially_malicious(self):
         self.validate('add-on201101101027.xpi')
-        self.expectMsg(u'Potentially unsafe JS in use.')
+        self.expectMsg(u'DOM Mutation Events Prohibited')
 
     def test_variable_element(self):
         self.validate('glee-20101227219.xpi')
@@ -299,12 +299,12 @@ class NavigatorLang(CompatValidatorTest):
     def test_firefox_5(self):
         self.validate_for_appver('navigator-lang-addon.xpi',
                                  FIREFOX_GUID, '5.*')
-        self.expectMsg(u'navigator.language may not behave as expected')
+        self.expectMsg(u'`navigator.language` may not behave as expected.')
 
     def test_mobile_5(self):
         self.validate_for_appver('navigator-lang-addon.xpi',
                                  MOBILE_GUID, '5.*')
-        self.expectMsg(u'navigator.language may not behave as expected')
+        self.expectMsg(u'`navigator.language` may not behave as expected.')
 
     def test_firefox_6(self):
         # The test should not run for any other Firefox version
@@ -318,4 +318,4 @@ class ValidateLibs(CompatValidatorTest):
     def test_mootools_navigator_taint_error(self):
         self.validate_for_appver('addon_with_mootools.xpi',
                                  FIREFOX_GUID, '9.*')
-        self.expectMsg('navigator.taintEnabled was removed in Firefox 9.')
+        self.expectMsg('`navigator.taintEnabled` was removed in Gecko 9')
