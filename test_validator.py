@@ -197,7 +197,7 @@ class GeneralTests(ValidatorTest):
 
     def test_xpi_cannot(self):
         self.validate('lavafox_test-theme-20101130538.xpi')
-        self.expectMsg(u'The XPI could not be opened.')
+        self.expectMsg(u'Corrupt ZIP file')
 
     def test_invalid_version(self):
         self.validate('invalid maximum version number.xpi')
