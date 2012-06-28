@@ -169,7 +169,7 @@ class GeneralTests(ValidatorTest):
 
     def test_blacklisted_file(self):
         self.validate('babuji-20110124355.xpi')
-        self.expectMsg(u'Flagged file extensions found')
+        self.expectMsg(u'Flagged file extensions found.')
 
     def test_blacklisted_file_2(self):
         self.validate('peerscape-3.1.5-fx.xpi')
@@ -236,7 +236,7 @@ class SecurityTests(CompatValidatorTest):
     def test_binary_files(self):
         self.validate_for_appver('cooliris-1.12.2.44172-fx-mac.xpi.xpi',
                                  FIREFOX_GUID, '5.0a2')
-        self.expectMsg(u"Flagged file extensions found")
+        self.expectMsg(u"Flagged file extensions found.")
         self.expectMsg(u"Flagged file type found")
         self.expectId(('testcases_packagelayout',
                        'test_compatibility_binary',
@@ -245,7 +245,7 @@ class SecurityTests(CompatValidatorTest):
     def test_thunderbird_binary_files(self):
         self.validate_for_appver('enigmail-1.2-sm-windows.xpi',
                                  THUNDERBIRD_GUID, '6.0a1')
-        self.expectMsg(u"Flagged file extensions found")
+        self.expectMsg(u"Flagged file extensions found.")
         self.expectId(('testcases_packagelayout',
                        'test_compatibility_binary',
                        'disallowed_file_type'))
