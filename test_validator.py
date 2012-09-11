@@ -135,12 +135,12 @@ class JavaScriptTests(ValidatorTest):
 
     def test_dangerous_global(self):
         self.validate('feedly-addon-201101111013.xpi')
-        self.expectMsg(u"`setTimeout` function called in potentially "
+        self.expectMsg(u"`setTimeout` called in potentially "
                        u"dangerous manner")
 
     def test_global_called(self):
         self.validate('babuji-20110124355.xpi')
-        self.expectMsg(u"`setTimeout` function called in potentially "
+        self.expectMsg(u"`setTimeout` called in potentially "
                        u"dangerous manner")
 
     def test_potentially_malicious(self):
