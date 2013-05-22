@@ -226,7 +226,7 @@ class SecurityTests(CompatValidatorTest):
 
     def test_missing_comments(self):
         self.validate('add-on-20110113408.xpi')
-        self.expectMsg(u'Missing comments in <script> tag')
+        self.expectMsg(u'Global variable overwrite')
 
     def test_typeless_iframes_browsers(self):
         self.validate('add-on201101081038.xpi')
