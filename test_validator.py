@@ -192,7 +192,7 @@ class GeneralTests(ValidatorTest):
 
     def test_invalid_id(self):
         self.validate('add-ongoogle-201101121132.xpi')
-        self.expectMsg(u'The value of <em:id> is invalid.')
+        self.expectMsg(u'The value of <em:id> is invalid')
 
     def test_xpi_cannot(self):
         self.validate('lavafox_test-theme-20101130538.xpi')
