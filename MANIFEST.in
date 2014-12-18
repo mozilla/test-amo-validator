@@ -1,0 +1,3 @@
+include addons/*
+include README.rst
+include requirements.txt
