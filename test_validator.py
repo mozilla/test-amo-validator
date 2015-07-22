@@ -291,30 +291,3 @@ class SearchTools(ValidatorTest):
     def test_too_many(self):
         self.validate('addon-12201-latest.xml')
         self.expectMsg(u'OpenSearch: Too many <ShortName> elements')
-
-
-class NavigatorLang(CompatValidatorTest):
-
-    def test_firefox_5(self):
-        self.validate_for_appver('navigator-lang-addon.xpi',
-                                 FIREFOX_GUID, '5.*')
-        self.expectMsg(u'`navigator.language` may not behave as expected.')
-
-    def test_mobile_5(self):
-        self.validate_for_appver('navigator-lang-addon.xpi',
-                                 MOBILE_GUID, '5.*')
-        self.expectMsg(u'`navigator.language` may not behave as expected.')
-
-    def test_firefox_6(self):
-        # The test should not run for any other Firefox version
-        self.validate_for_appver('navigator-lang-addon.xpi',
-                                 FIREFOX_GUID, '6.*')
-        self.shouldNotGetMsg(u'navigator.language may not behave as expected')
-
-
-class ValidateLibs(CompatValidatorTest):
-
-    def test_mootools_navigator_taint_error(self):
-        self.validate_for_appver('addon_with_mootools.xpi',
-                                 FIREFOX_GUID, '9.*')
-        self.expectMsg('`navigator.taintEnabled` was removed in Gecko 9')
