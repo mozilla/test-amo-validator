@@ -1,3 +1,6 @@
+*This is now deprecated/unused, as of
+https://github.com/mozilla/amo-validator/pull/341*
+
 Functional / regression test suite for `amo-validator`_, the Add-on validator
 used at http://addons.mozilla.org/
 
