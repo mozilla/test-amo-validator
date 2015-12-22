@@ -151,6 +151,67 @@ class JavaScriptTests(ValidatorTest):
         self.validate('glee-20101227219.xpi')
         self.expectMsg(u'Variable element type being created')
 
+    def test_illegal_eval(self):
+        self.validate('illegal-access-eval.xpi')
+        self.expectMsg(u"Illegal or deprecated access to the 'eval'"
+                       u" global")
+
+    def test_illegal_function(self):
+     	self.validate('illegal-access-function.xpi')
+        self.expectMsg(u"Illegal or deprecated access to the 'Function'"
+                       u" global")
+
+    def test_javascript_compile_time_error(self):
+        self.validate('javascript-complie-time-error.xpi')
+        self.expectMsg(u'JavaScript Compile-Time Error')
+
+    def test_innerHTML_set_dynamically(self):
+        self.validate('innerHTML-dynamically-set.xpi')
+        self.expectMsg(u'innerHTML should not be set dynamically')
+
+    def test_setSubstitution_called_dangerously(self):
+        self.validate('setSubstitution.xpi')
+        self.expectMsg(u"'setSubstitution' function called in potentially "
+                       u"dangerous manner")
+
+    def test_mozIJSSubScriptLoader_illegal_access(self):
+        self.validate('mozIJSSubScriptLoader.xpi')
+        self.expectMsg(u"Illegal or deprecated access to the "
+                       u"'mozIJSSubScriptLoader' global")
+    
+    def test_unsafe_preference_branch(self):
+        self.validate('unsafe-preference-branch.xpi')
+        self.expectMsg(u'Potentially unsafe preference branch referenced')
+
+    def test_on_propertyt(self):
+        self.validate('on-property.xpi')
+        self.expectMsg(u'on* property being assigned string')
+
+    def test_setInterval_called_dangerously(self):
+        self.validate('setInterval.xpi')
+        self.expectMsg(u"'setInterval' function called in potentially "
+                       u"dangerous manner")
+
+    def test_evalInSandbox_illegal_access(self):
+        self.validate('evalInSandbox.xpi')
+        self.expectMsg(u"Illegal or deprecated access to the "
+                       u"'evalInSandbox' global")
+
+    def test_addObserver_called_dangerously(self):
+        self.validate('addObserver.xpi')
+        self.expectMsg(u"'addObserver' function called in potentially " 
+                       u"dangerous manner")
+
+    def test_registerFactory_called_dangerously(self):
+        self.validate('registerFactory-called-dangerously.xpi')
+        self.expectMsg(u"'registerFactory' function called in potentially "
+                       u"dangerous manner")
+
+    def test_setTimeout_called_dangerously(self):
+        self.validate('setTimeout.xpi')
+        self.assertPartialMsg(u"'setTimeout' function called in potentially "
+                              u"dangerous manner")
+
 
 class GeneralTests(ValidatorTest):
 
